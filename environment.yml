@@ -1,0 +1,26 @@
+name: agriguard_env
+channels:
+  - defaults
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - plotly
+  - streamlit
+  - tqdm
+  # PyTorch (CPU version is usually default for lightweight envs, add cuda if you have GPU)
+  - pytorch
+  - torchvision
+  - pip:
+    - kaggle
+    - python-dotenv
+    - opencv-python-headless
+    - ultralytics  # For YOLOv8
+    - roboflow     # For dataset management (optional but recommended)
+    - pillow

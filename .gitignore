@@ -1,0 +1,12 @@
+# Data
+data/
+outputs/
+weights/
+*.pt
+*.onnx
+
+# Environment
+.env
+.ipynb_checkpoints/
+__pycache__/
+*.log
