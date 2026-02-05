@@ -1,6 +1,7 @@
 import streamlit as st
 from ultralytics import YOLO
 from PIL import Image
+import pandas as pd
 import numpy as np
 import sys
 import os
@@ -20,17 +21,20 @@ st.set_page_config(
 # --- 1. LOAD RESOURCES (Cached for Speed) ---
 @st.cache_resource
 def load_model():
-    # Try to find the best model (Pro > Nano)
-    paths = [
-        'weights/agriguard_pro/weights/best.pt',
-        'weights/agriguard_model/weights/best.pt',
-        'yolov8m-cls.pt' # Fallback to pre-trained
-    ]
-    for p in paths:
-        if os.path.exists(p):
-            print(f"[App] Loading Model: {p}")
-            return YOLO(p)
-    return YOLO('yolov8n-cls.pt') # Ultimate fallback
+    # 1. Define the exact path to your trained model
+    # Windows paths use backslashes (\), Python prefers forward slashes (/)
+    # Update this string to match YOUR specific location if different
+    model_path = 'runs/classify/weights/agriguard_model/weights/best.pt' 
+
+    # 2. Check if it exists
+    if os.path.exists(model_path):
+        st.success(f"✅ Custom AgriGuard Model Loaded: {model_path}")
+        return YOLO(model_path)
+    else:
+        st.error(f"❌ Custom Model NOT Found at: {model_path}")
+        st.warning("Please check the 'weights' folder. Did training finish?")
+        # STOP the app here so you don't get 'butternut squash' results
+        st.stop()
 
 @st.cache_resource
 def load_financial_engine():
@@ -77,7 +81,7 @@ if mode == "👨‍🌾 Farmer (Diagnosis)":
         
         with col1:
             image = Image.open(uploaded_file)
-            st.image(image, caption="Uploaded Image", use_column_width=True)
+            st.image(image, caption="Uploaded Image", use_container_width=True)
         
         with col2:
             st.write("### AI Diagnosis Results")
